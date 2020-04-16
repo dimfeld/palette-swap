@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "sourceMap": true,
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "target": "es2020",
+        "allowJs": true,
+        "noEmit": true,
+        "lib": ["dom"]
+    },
+    "paths": {
+        "^/*": ["src/*"]
+    },
+    "include": ["src"],
+    "compileOnSave": false
+}
