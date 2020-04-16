@@ -14,6 +14,7 @@
         "static-stories": "build-storybook -c .storybook -o .out"
     },
     "dependencies": {
+        "d3-color": "^1.4.0",
         "sirv-cli": "^0.4.4"
     },
     "devDependencies": {

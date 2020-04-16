@@ -1,7 +1,7 @@
 public/bundle.*
 public/utils.*
+build
 package-lock.json
-yarn.lock
 
 ### Node ###
 # Logs
