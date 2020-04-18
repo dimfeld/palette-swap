@@ -2,27 +2,33 @@
   import * as d3 from 'd3-color';
   import { onMount } from 'svelte';
 
+  let classNames = undefined;
+  export { classNames as class };
+
   export let mode = 'hsl';
 
+  // A d3-color instance with the selected color.
   export let value;
 
   export let angleType = 'h';
   export let radiusType = 's';
   export let fixedValue = 0.5;
   export let square = false;
+  export let redrawDelay = 0;
 
   let canvas;
-
   let ctx;
-  onMount(() => {
-    ctx = canvas.getContext('2d');
-  });
 
-  async function createColorWheel(s, colorFunc) {
-    let endSize = Math.round(s / 2);
+  $: if (canvas && size) {
+    ctx = canvas.getContext('2d');
+  }
+
+  function createColorWheel(colorFunc) {
+    let start = Date.now();
+    let endSize = Math.round(size / 2);
     let startSize = -endSize;
 
-    let imageData = new Uint8ClampedArray(4 * s * s);
+    let imageData = new Uint8ClampedArray(4 * size * size);
     let imageDataIndex = 0;
 
     for (let y = startSize; y < endSize; ++y) {
@@ -42,6 +48,18 @@
 
     let data = new ImageData(imageData, size, size);
     ctx.putImageData(data, 0, 0);
+  }
+
+  let scheduled;
+  function scheduleColorWheel(fn) {
+    if (redrawDelay) {
+      if (scheduled) {
+        clearTimeout(scheduled);
+      }
+      scheduled = setTimeout(fn, redrawDelay);
+    } else {
+      fn();
+    }
   }
 
   // Keyed by mode-angleTyperadiusType
@@ -71,12 +89,18 @@
     'lch-lh': (angle, radius) => d3.lch(angle * 100, fixedValue, radius * 360),
   };
 
-  const size = 360;
+  const size = 1000;
+  // let divWidth = 500;
+  // let divHeight = 500;
+  // $: size = Math.min(divWidth, divHeight);
   $: colorCreator = colorCreators[`${mode}-${angleType}${radiusType}`];
-  $: if (colorCreator && ctx) {
-    createColorWheel(size, colorCreator);
+  $: if (colorCreator && ctx && size) {
+    fixedValue;
+    scheduleColorWheel(() => createColorWheel(colorCreator));
   }
 
+  let selectedAngle = 0;
+  let selectedRadius = 0;
   function handleClick(evt) {
     if (!canvas) {
       return;
@@ -85,23 +109,24 @@
     let x = Math.round(size * (evt.offsetX / canvas.clientWidth - 0.5));
     let y = Math.round(size * (evt.offsetY / canvas.clientHeight - 0.5));
 
-    let angle = Math.atan2(y, x);
-    let radius = Math.sqrt(x * x + y * y);
+    selectedAngle = Math.atan2(y, x);
+    selectedRadius = Math.sqrt(x * x + y * y);
+  }
 
-    value = colorCreator(angle / (2 * Math.PI), radius / (size / 2)).rgb();
+  $: {
+    fixedValue;
+    value = colorCreator(
+      selectedAngle / (2 * Math.PI),
+      selectedRadius / (size / 2)
+    );
   }
 </script>
 
-<div style="width:256px;height:256px">
+<div class={classNames}>
   <canvas
     on:click={handleClick}
-    width="360"
-    height="360"
-    style="height:100%;width:100%"
+    width={size}
+    height={size}
+    style="width:100%;height:100%"
     bind:this={canvas} />
 </div>
-
-{#if value}
-  <p style="color:{value.formatHsl()}">{value.formatHsl()}</p>
-  <p style="color:{value.rgb().formatRgb()}">{value.rgb().formatRgb()}</p>
-{/if}
