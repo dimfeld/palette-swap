@@ -15,6 +15,7 @@
     },
     "dependencies": {
         "d3-color": "^1.4.0",
+        "lodash-es": "^4.17.15",
         "sirv-cli": "^0.4.4"
     },
     "devDependencies": {

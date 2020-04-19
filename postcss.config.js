@@ -1,5 +1,5 @@
 const production =
-  !process.env.ROLLUP_WATCH && process.env.NODE_ENV !== 'production';
+  !process.env.ROLLUP_WATCH || process.env.NODE_ENV === 'production';
 const purgecss = require('@fullhuman/postcss-purgecss');
 
 module.exports = {
