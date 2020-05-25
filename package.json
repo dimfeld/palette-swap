@@ -14,7 +14,7 @@
     "static-stories": "build-storybook -c .storybook -o .out"
   },
   "dependencies": {
-    "@simonwep/pickr": "^1.6.0",
+    "@jaames/iro": "^5.1.8",
     "d3-color": "^1.4.0",
     "idb-keyval": "^3.2.0",
     "lodash-es": "^4.17.15",

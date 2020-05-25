@@ -929,6 +929,19 @@
     postcss "7.0.28"
     purgecss "^2.2.0"
 
+"@irojs/iro-core@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@irojs/iro-core/-/iro-core-1.0.0.tgz#8cbd19c699c59f70b3c3a773fb7ca2985de5f367"
+  integrity sha512-7vup43KLDtLuurfVXmhFnnNxtDVQ5JvjQglo5yZDM5DcHwSF3XeEjyeerM5nE6Me1QmAoKRGNDz4QVhzQI1OBw==
+
+"@jaames/iro@^5.1.8":
+  version "5.1.8"
+  resolved "https://registry.yarnpkg.com/@jaames/iro/-/iro-5.1.8.tgz#60f5e8a4e56931f0b195fab8c8baef6f73fc10cd"
+  integrity sha512-jsFNYbbSVDQojo9WFf54HD9QxF41FQiPDvDx3wDTLJQSydlbhCzTiGpOSrPNsCfWaqHVuq8QEStrbsXGQOhDlA==
+  dependencies:
+    "@irojs/iro-core" "^1.0.0"
+    preact "^10.0.0"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -1023,13 +1036,6 @@
     "@types/estree" "0.0.39"
     estree-walker "^1.0.1"
     micromatch "^4.0.2"
-
-"@simonwep/pickr@^1.6.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@simonwep/pickr/-/pickr-1.6.0.tgz#bc5e14bf29acb8e97a3b57652f98dc8e2ed60d8e"
-  integrity sha512-hvAozlQuncF3s2ymVJ1JGLb/b94O8s7WNqKIA0sI7PIh8u8NozjAiQtdEdtI/v4rJ+HrXaznESOX0/xMayVDLA==
-  dependencies:
-    core-js "^3.6.5"
 
 "@storybook/addon-a11y@^5.2.1":
   version "5.3.18"
@@ -3281,7 +3287,7 @@ core-js-pure@^3.0.1:
   resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.6.5.tgz#c79e75f5e38dbc85a662d91eea52b8256d53b813"
   integrity sha512-lacdXOimsiD0QyNf9BC/mxivNJ/ybBGJXQFKzRekp1WTHoVUWsUHEn+2T8GJAzzIhyOuXA+gOxCVN3l+5PLPUA==
 
-core-js@^3.0.1, core-js@^3.0.4, core-js@^3.6.5:
+core-js@^3.0.1, core-js@^3.0.4:
   version "3.6.5"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.6.5.tgz#7395dc273af37fb2e50e9bd3d9fe841285231d1a"
   integrity sha512-vZVEEwZoIsI+vPEuoF9Iqf5H7/M3eeQqWlQnYa8FSKKePuYTf5MWnxb5SDAzCa60b3JBRS5g9b+Dq7b1y/RCrA==
@@ -7598,6 +7604,11 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.11, postcss@^7.0.14, postcss@^7.0.1
     chalk "^2.4.2"
     source-map "^0.6.1"
     supports-color "^6.1.0"
+
+preact@^10.0.0:
+  version "10.4.4"
+  resolved "https://registry.yarnpkg.com/preact/-/preact-10.4.4.tgz#0bd6d759ec2f8684aaf8c63c7f076191e46528cf"
+  integrity sha512-EaTJrerceyAPatQ+vfnadoopsMBZAOY7ak9ogVdUi5xbpR8SoHgtLryXnW+4mQOwt21icqoVR1brkU2dq7pEBA==
 
 prelude-ls@~1.1.2:
   version "1.1.2"
