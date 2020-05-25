@@ -31,5 +31,5 @@ module.exports = {
           return matchedTokens;
         },
       }),
-  ],
+  ].filter(Boolean),
 };
