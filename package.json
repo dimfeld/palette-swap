@@ -1,16 +1,16 @@
 {
-  "name": "svelte-storybook-tailwind",
-  "author": "Jerric Lyns John",
+  "name": "palette-swap",
+  "author": "Daniel Imfeld",
   "license": "MIT",
   "version": "0.0.2",
   "scripts": {
-    "build-svelte": "rollup -c",
-    "autobuild-svelte": "rollup -c -w",
-    "dev": "run-p start:dev autobuild-svelte",
+    "build": "rimraf build && rollup -c",
+    "autobuild": "rimraf build && rollup -c -w",
+    "dev": "run-p start:dev autobuild",
     "start": "sirv build --single",
     "start:dev": "sirv build -H 0.0.0.0 --single --dev",
     "stories": "start-storybook",
-    "build": "build-storybook -o public",
+    "build-stories": "build-storybook -o public",
     "static-stories": "build-storybook -c .storybook -o .out"
   },
   "dependencies": {
@@ -58,6 +58,7 @@
     "postcss-import": "^12.0.1",
     "prettier": "^2.0.5",
     "prettier-plugin-svelte": "^0.7.0",
+    "rimraf": "^3.0.2",
     "rollup": "^1.21.4",
     "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-livereload": "^1.0.0",
