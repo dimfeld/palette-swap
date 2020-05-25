@@ -67,9 +67,9 @@ export default {
     commonjs(),
     babel(babelConfig),
 
-    // Watch the `public` directory and refresh the
+    // Watch the `build` directory and refresh the
     // browser on changes when not in production
-    !production && livereload('public'),
+    !production && livereload('build'),
 
     // If we're building for production (npm run build
     // instead of npm run dev), minify
