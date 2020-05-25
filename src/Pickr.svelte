@@ -43,13 +43,14 @@
   let container;
   $: if (container) {
     if (pickr) {
-      pickr.destroy();
+      pickr.destroyAndRemove();
     }
 
     let opt = options || {};
     let components = opt.components || {};
     let interaction = components.interaction || {};
 
+    console.log('Creating pickr');
     pickr = Pickr.create({
       ...opt,
       components: {
@@ -63,7 +64,10 @@
 
       el: container,
     })
-      .on('init', (p) => dispatch('init', p))
+      .on('init', (p) => {
+        dispatch('init', p);
+        setColor();
+      })
       .on('hide', (p) => {
         visible = false;
         dispatch('hide', p);
@@ -87,15 +91,22 @@
         value = color;
         dispatch('swatchselect', { color, pickr });
       });
+
+    // setColor(value);
+  }
+
+  function setColor(val) {
+    val = val || value;
+    if (typeof val === 'string') {
+      pickr.setColor(val);
+    } else if (val.toHSVA) {
+      let [h, s, v, a] = val.toHSVA();
+      pickr.setHSVA(h, s, v, a);
+    }
   }
 
   $: if (pickr && value) {
-    if (typeof value === 'string') {
-      pickr.setColor(value);
-    } else if (value.toHSVA) {
-      let [h, s, v, a] = value.toHSVA();
-      pickr.setHSVA(h, s, v, a);
-    }
+    setColor(value);
   }
   $: if (pickr) {
     if (visible) {
