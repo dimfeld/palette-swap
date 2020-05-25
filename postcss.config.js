@@ -1,6 +1,7 @@
 const production =
   !process.env.ROLLUP_WATCH || process.env.NODE_ENV === 'production';
 const purgecss = require('@fullhuman/postcss-purgecss');
+const cssnano = require('cssnano');
 
 module.exports = {
   plugins: [
@@ -9,9 +10,10 @@ module.exports = {
     require('autoprefixer'),
     production &&
       purgecss({
-        content: ['./**/*.html', './**/*.svelte'],
+        content: ['./src/*.html', './src/*.svelte'],
+        whitelistPatterns: [/^svelte-/],
         defaultExtractor: (content) => {
-          const regExp = new RegExp(/[A-Za-z0-9-_:/]+/g);
+          const regExp = new RegExp(/[A-Za-z0-9-_:/.]+/g);
 
           const matchedTokens = [];
 
@@ -31,5 +33,6 @@ module.exports = {
           return matchedTokens;
         },
       }),
+    production && cssnano(),
   ].filter(Boolean),
 };

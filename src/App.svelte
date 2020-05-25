@@ -76,10 +76,10 @@
     .join(';');
 </script>
 
-<style language="postcss">
+<style global language="postcss">
   p {
     max-width: 70ch;
-    @apply my-4;
+    @apply my-4 text-left;
   }
 
   a {
@@ -88,6 +88,7 @@
 
   ul > li {
     list-style: disc;
+    list-style-type: disc;
   }
 </style>
 
