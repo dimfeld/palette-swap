@@ -85,6 +85,10 @@
   a {
     @apply underline text-primary-700;
   }
+
+  ul > li {
+    list-style: disc;
+  }
 </style>
 
 <div style={themeVarStyles} class="pt-4 px-4 w-full bg-primary-50 min-h-screen">
@@ -96,6 +100,7 @@
 
       <div>
         <input
+          class="form-checkbox text-primary-500"
           name="dynamic-theme"
           id="dynamic-theme"
           type="checkbox"
@@ -115,6 +120,15 @@
         {/each}
       </div>
     </div>
+
+    <p class="text-primary-700">
+      <strong>More features coming soon!</strong>
+    </p>
+    <ul>
+      <li>Select from multiple source palettes</li>
+      <li>Custom source palettes</li>
+      <li>Copy your results out of the tool</li>
+    </ul>
 
     <p>
       This tool is the outgrowth of a blog post I wrote in early 2020 when I
