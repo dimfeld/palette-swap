@@ -1,6 +1,7 @@
 <script>
   import Iro from './IroColorPicker.svelte';
   import Color from 'ac-colors';
+  import ButtonRow from './components/ButtonRow.svelte';
   import * as twColors from '@tailwindcss/ui/colors.js';
   import { set as setIdb, get as getIdb } from 'idb-keyval';
 
@@ -8,8 +9,6 @@
   $: colorAsString = currentColor.hexString
     ? currentColor.hexString
     : currentColor;
-
-  let dynamicTheme = true;
 
   getIdb('current-color')
     .then((c) => {
@@ -33,11 +32,12 @@
       }
     }
 
-    maybe('dynamicTheme', (v) => (dynamicTheme = v));
+    maybe('themePalette', (v) => (themePalette = v));
+    maybe('chromaSource', (v) => (chromaSource = v));
   });
 
   $: setIdb('current-color', colorAsString);
-  $: setIdb('settings', { dynamicTheme });
+  $: setIdb('settings', { chromaSource, themePalette });
 
   const sourcePalette = [
     { name: '50', value: '#f0f5ff' },
@@ -57,8 +57,9 @@
   $: output = sourcePalette.map(({ name, value }) => {
     let sourceColor = new Color({ type: 'hex', color: value });
 
-    // Set the color to the chrome and hue of the active color, but the luminance of the source color
-    sourceColor.lchab = [sourceColor.lchab[0], activeC, activeH];
+    // Use the hue of the palette color and the luminance of the source color. Chroma is selectable.
+    let c = chromaSource === 'active-color' ? activeC : sourceColor.lchab[1];
+    sourceColor.lchab = [sourceColor.lchab[0], c, activeH];
 
     return {
       name,
@@ -70,10 +71,22 @@
   $: themeVarStyles = output
     .map((o) => {
       let varName = `--color-primary-${o.name}`;
-      let value = dynamicTheme ? o.dest : twColors.teal[o.name];
+      let value = themePalette === 'output-palette' ? o.dest : o.source;
       return `${varName}:${value}`;
     })
     .join(';');
+
+  let themePalette = 'output-palette';
+  const styleSourceButtons = [
+    { id: 'source-palette', label: 'Source' },
+    { id: 'output-palette', label: 'Result' },
+  ];
+
+  let chromaSource = 'source-palette';
+  const chromaSourceButtons = [
+    { id: 'source-palette', label: 'Source Palette' },
+    { id: 'active-color', label: 'Selected Color' },
+  ];
 </script>
 
 <style global language="postcss">
@@ -94,27 +107,43 @@
 
 <div style={themeVarStyles} class="pt-4 px-4 w-full bg-primary-50 min-h-screen">
   <div class="flex flex-col items-center w-full mx-auto">
-    <div class="mx-auto flex flex-col items-center space-y-4 max-w-md">
+    <div class="mx-auto flex flex-col items-center space-y-4">
       <Iro bind:value={currentColor} />
       <div>{colorAsString}</div>
       <div class="h-32 w-32" style="background-color:{colorAsString}" />
 
-      <div>
-        <input
-          class="form-checkbox text-primary-500"
-          name="dynamic-theme"
-          id="dynamic-theme"
-          type="checkbox"
-          bind:checked={dynamicTheme} />
-        <label for="dynamic-theme">Use selected color for site theme</label>
+      <div
+        class="flex flex-col items-center sm:flex-row space-y-4 sm:space-x-8
+        sm:space-y-0 sm:justify-between sm:w-full">
+        <div class="flex-1">
+          <div class="mb-2 text-sm font-medium text-primary-800">
+            Site Theme Palette
+          </div>
+          <ButtonRow
+            buttonClass="w-32"
+            buttons={styleSourceButtons}
+            bind:value={themePalette} />
+        </div>
+
+        <div class="flex-1">
+          <div class="mb-2 text-sm font-medium text-primary-800">
+            Chroma from
+          </div>
+          <ButtonRow
+            buttonClass="w-32"
+            buttons={chromaSourceButtons}
+            bind:value={chromaSource} />
+        </div>
       </div>
 
-      <div class="flex flex-col w-5/6">
+      <div class="flex flex-col w-5/6 max-w-sm">
         {#each output as item}
           <div class="flex flex-row justify-between">
             <div class="h-12 w-12" style="background-color:{item.source}" />
 
-            <div class="text-sm font-medium text-primary-700">{item.name}</div>
+            <div class="w-3/4 text-center text-sm font-medium text-primary-700">
+              {item.name}
+            </div>
 
             <div class="h-12 w-12" style="background-color:{item.dest}" />
           </div>
