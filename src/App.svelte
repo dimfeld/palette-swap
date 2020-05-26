@@ -138,7 +138,7 @@
 
       <div class="flex flex-col w-5/6 max-w-sm">
         {#each output as item}
-          <div class="flex flex-row justify-between">
+          <div class="flex flex-row items-center justify-between">
             <div class="h-12 w-12" style="background-color:{item.source}" />
 
             <div class="w-3/4 text-center text-sm font-medium text-primary-700">
