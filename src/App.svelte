@@ -108,9 +108,15 @@
 <div style={themeVarStyles} class="pt-4 px-4 w-full bg-primary-50 min-h-screen">
   <div class="flex flex-col items-center w-full mx-auto">
     <div class="mx-auto flex flex-col items-center space-y-4">
-      <Iro bind:value={currentColor} />
-      <div>{colorAsString}</div>
-      <div class="h-32 w-32" style="background-color:{colorAsString}" />
+      <div
+        class="flex flex-col sm:flex-row space-y-4 sm:space-x-8 sm:space-y-0
+        sm:items-center">
+        <Iro bind:value={currentColor} />
+        <div class="flex flex-col space-y-4 items-center">
+          <div class="h-32 w-32" style="background-color:{colorAsString}" />
+          <div>{colorAsString}</div>
+        </div>
+      </div>
 
       <div
         class="flex flex-col items-center sm:flex-row space-y-4 sm:space-x-8
