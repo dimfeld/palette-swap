@@ -1,9 +1,11 @@
 <script>
   import Iro from './IroColorPicker.svelte';
   import Color from 'ac-colors';
+  import Button from './components/Button.svelte';
   import ButtonRow from './components/ButtonRow.svelte';
-  import * as twColors from '@tailwindcss/ui/colors.js';
   import { set as setIdb, get as getIdb } from 'idb-keyval';
+  import sourcePalettes from './palettes';
+  import * as clipboard from 'clipboard-polyfill';
 
   let currentColor = '#5ab896';
   $: colorAsString = currentColor.hexString
@@ -34,23 +36,19 @@
 
     maybe('themePalette', (v) => (themePalette = v));
     maybe('chromaSource', (v) => (chromaSource = v));
+    maybe('activePaletteId', (v) => (activePaletteId = v));
+    if (!sourcePalettes[activePaletteId]) {
+      activePaletteId = 'tailwind-indigo';
+    }
   });
 
   $: setIdb('current-color', colorAsString);
-  $: setIdb('settings', { chromaSource, themePalette });
+  $: setIdb('settings', { chromaSource, themePalette, activePaletteId });
 
-  const sourcePalette = [
-    { name: '50', value: '#f0f5ff' },
-    { name: '100', value: '#e5edff' },
-    { name: '200', value: '#cddbfe' },
-    { name: '300', value: '#b4c6fc' },
-    { name: '400', value: '#8da2fb' },
-    { name: '500', value: '#6875f5' },
-    { name: '600', value: '#5850ec' },
-    { name: '700', value: '#5145cd' },
-    { name: '800', value: '#42389d' },
-    { name: '900', value: '#362f78' },
-  ];
+  let activePaletteId = 'tailwind-indigo';
+  $: sourcePalette = Object.entries(
+    sourcePalettes[activePaletteId].palette
+  ).map(([key, value]) => ({ name: key, value }));
 
   $: activeColor = new Color({ type: 'hex', color: colorAsString });
   $: [activeL, activeC, activeH] = activeColor.lchab;
@@ -67,6 +65,40 @@
       dest: sourceColor.hexString,
     };
   });
+
+  let copyButtonText = 'Copy Results';
+
+  function copyResults() {
+    let obj = {};
+    for (let { name, dest } of output) {
+      obj[name] = dest;
+    }
+
+    let json = JSON.stringify(obj, null, 2);
+    try {
+      clipboard.writeText(json);
+      copyButtonText = 'Copied!';
+      setTimeout(() => (copyButtonText = 'Copy Results'), 2000);
+    } catch (e) {
+      showCopyModal(json);
+    }
+  }
+
+  function showCopyModal(content) {
+    alert(content);
+  }
+
+  function sortStrings(a, b) {
+    a = a[1].name;
+    b = b[1].name;
+    if (a < b) {
+      return -1;
+    } else if (b < a) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 
   $: themeVarStyles = output
     .map((o) => {
@@ -92,7 +124,7 @@
 <style global language="postcss">
   p {
     max-width: 70ch;
-    @apply my-4 text-left;
+    @apply my-4 text-left w-full;
   }
 
   a {
@@ -102,6 +134,7 @@
   ul > li {
     list-style: disc;
     list-style-type: disc;
+    list-style-position: outside;
   }
 </style>
 
@@ -141,6 +174,21 @@
             bind:value={chromaSource} />
         </div>
       </div>
+      <div>
+        <div class="mb-2 text-sm font-medium text-primary-800">
+          Source Palette
+        </div>
+        <select
+          class="form-select"
+          id="source-palette"
+          bind:value={activePaletteId}>
+          {#each Object.entries(sourcePalettes).sort(sortStrings) as [key, { name }] (key)}
+            <option value={key} selected={activePaletteId === key}>
+              {name}
+            </option>
+          {/each}
+        </select>
+      </div>
 
       <div class="flex flex-col w-5/6 max-w-sm">
         {#each output as item}
@@ -155,17 +203,19 @@
           </div>
         {/each}
       </div>
+
+      <Button on:click={copyResults}>{copyButtonText}</Button>
     </div>
 
-    <p class="text-primary-700">
-      <strong>More features coming soon!</strong>
+    <p class="text-primary-700 text-center">
+      <strong>Custom source palettes coming soon!</strong>
     </p>
-    <ul>
-      <li>Select from multiple source palettes</li>
-      <li>Custom source palettes</li>
-      <li>Copy your results out of the tool</li>
-    </ul>
 
+    <p>
+      If you found this useful or interesting, please let me know and
+      <a href="https://www.twitter.com/dimfeld">follow me on Twitter</a>
+      where I post more about tech and web development.
+    </p>
     <p>
       This tool is the outgrowth of a blog post I wrote in early 2020 when I
       used the LCH color space to adapt the Angular Material blue-gray colors to
@@ -176,9 +226,10 @@
       for the story and more details about how this works.
     </p>
     <p>
-      If you found this useful or interesting, please let me know and
-      <a href="https://www.twitter.com/dimfeld">follow me on Twitter</a>
-      where I post more about tech and web development.
+      Source palettes are from
+      <a href="https://tailwindcss.com">Tailwind CSS</a>
+      and
+      <a href="https://material-ui.com/customization/color/">Material UI.</a>
     </p>
     <p>
       This site is written in
