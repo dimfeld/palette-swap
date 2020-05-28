@@ -229,9 +229,15 @@
     </p>
     <p>
       Source palettes are from
-      <a href="https://tailwindcss.com">Tailwind CSS</a>
+      <a href="https://tailwindcss.com">Tailwind CSS,</a>
+
+      <a href="https://material-ui.com/customization/color/">Material UI,</a>
       and
-      <a href="https://material-ui.com/customization/color/">Material UI.</a>
+      <a
+        href="https://github.com/axismaps/colorbrewer/blob/master/colorbrewer_schemes.js">
+        Colorbrewer.
+      </a>
+
     </p>
     <p>
       This site is written in
