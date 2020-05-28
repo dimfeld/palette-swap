@@ -53,16 +53,18 @@
   $: activeColor = new Color({ type: 'hex', color: colorAsString });
   $: [activeL, activeC, activeH] = activeColor.lchab;
   $: output = sourcePalette.map(({ name, value }) => {
-    let sourceColor = new Color({ type: 'hex', color: value });
+    let colorType = typeof value === 'string' ? 'hex' : 'rgb';
+    let color = new Color({ type: colorType, color: value });
+    let sourceColor = color.hexString;
 
     // Use the hue of the palette color and the luminance of the source color. Chroma is selectable.
-    let c = chromaSource === 'active-color' ? activeC : sourceColor.lchab[1];
-    sourceColor.lchab = [sourceColor.lchab[0], c, activeH];
+    let c = chromaSource === 'active-color' ? activeC : color.lchab[1];
+    color.lchab = [color.lchab[0], c, activeH];
 
     return {
       name,
-      source: value,
-      dest: sourceColor.hexString,
+      source: sourceColor,
+      dest: color.hexString,
     };
   });
 
