@@ -134,9 +134,16 @@
   }
 
   ul > li {
-    list-style: disc;
-    list-style-type: disc;
-    list-style-position: outside;
+    list-style: none;
+  }
+
+  li::before {
+    content: '•';
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    color: black;
+    color: var(--color-primary-500);
   }
 </style>
 
@@ -209,9 +216,15 @@
       <Button on:click={copyResults}>{copyButtonText}</Button>
     </div>
 
-    <p class="text-primary-700 text-center">
-      <strong>Custom source palettes coming soon!</strong>
+    <p class="mt-8 mb-0 text-primary-700 text-center">
+      <strong>Coming soon</strong>
     </p>
+    <ul>
+      <li>Custom source palettes</li>
+      <li>Shareable links</li>
+      <li>More help text</li>
+      <li>Better "copy results" experience</li>
+    </ul>
 
     <p>
       If you found this useful or interesting, please let me know and
