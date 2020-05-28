@@ -76,7 +76,7 @@ export default {
     production && terser(),
 
     html({
-      title: 'Palette Swapper',
+      title: 'Palette Transformer',
       template: ({ attributes, files, publicPath, title }) => {
         let templateFile = fs.readFileSync('src/index.html');
 
